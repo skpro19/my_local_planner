@@ -1,0 +1,1 @@
+/usr/bin/g++-7 -fPIC -g  -shared -Wl,-soname,liblocal_planner_lib.so -o devel/lib/liblocal_planner_lib.so CMakeFiles/local_planner_lib.dir/src/local_planner.cpp.o 

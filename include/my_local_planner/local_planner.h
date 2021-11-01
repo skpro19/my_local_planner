@@ -7,7 +7,7 @@
 #include <tf/transform_listener.h>
 #include <costmap_2d/costmap_2d_ros.h>
 #include <costmap_2d/costmap_2d.h>
-
+#include <tf2_ros/buffer.h>
 
 using namespace std;
 
@@ -18,12 +18,12 @@ namespace local_planner{
     public:
       LocalPlanner();
 
-      LocalPlanner(std::string name, tf::TransformListener* tf,
+      LocalPlanner(std::string name, tf2_ros::Buffer* tf,
           costmap_2d::Costmap2DROS* costmap_ros);
 
       ~LocalPlanner();
 
-      void initialize(std::string name, tf::TransformListener* tf,
+      void initialize(std::string name, tf2_ros::Buffer* tf,
           costmap_2d::Costmap2DROS* costmap_ros);
 
       bool setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan);
@@ -38,7 +38,7 @@ namespace local_planner{
       costmap_2d::Costmap2D* costmap_ros_;
       costmap_2d::Costmap2DROS* my_costmap_ros;
       tf::TransformListener* tf_;
-      
+
   };
 };
 
