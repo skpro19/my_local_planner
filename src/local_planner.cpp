@@ -14,7 +14,9 @@ namespace local_planner{
                 initialize(name, tf, costmap_ros);
          }
 
-       
+        LocalPlanner::~LocalPlanner(){
+                
+        }
 
         void LocalPlanner::initialize(std::string name, tf2_ros::Buffer* tf, costmap_2d::Costmap2DROS* costmap_ros)
         {
