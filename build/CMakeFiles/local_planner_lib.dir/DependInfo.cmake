@@ -18,18 +18,17 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
-  "/home/skpro19/catkin_ws/devel/.private/actionlib/include"
-  "/home/skpro19/catkin_ws/devel/.private/costmap_2d/include"
-  "/home/skpro19/catkin_ws/devel/.private/move_base/include"
   "/home/skpro19/catkin_ws/devel/.private/base_local_planner/include"
+  "/home/skpro19/catkin_ws/devel/.private/costmap_2d/include"
+  "/home/skpro19/catkin_ws/devel/.private/actionlib/include"
   "/home/skpro19/catkin_ws/src/actionlib/include"
   "/home/skpro19/catkin_ws/src/navigation/voxel_grid/include"
   "/home/skpro19/catkin_ws/src/navigation/costmap_2d/include"
   "/home/skpro19/catkin_ws/src/navigation/nav_core/include"
   "/home/skpro19/catkin_ws/src/navigation/base_local_planner/include"
-  "/home/skpro19/catkin_ws/src/navigation/move_base/include"
   "/opt/ros/melodic/include"
   "/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
+  "/opt/ros/melodic/share/orocos_kdl/cmake/../../../include"
   "/usr/include/eigen3"
   )
 

@@ -64,7 +64,8 @@
   <depend>actionlib</depend>  
   <depend>move_base_msgs</depend>
   <depend>visualization_msgs</depend>
-  <depend>nav_core</depend>
+  <depend> nav_core</depend>
+  <depend>base_local_planner</depend>
   
 
   <build_depend>message_generation</build_depend>

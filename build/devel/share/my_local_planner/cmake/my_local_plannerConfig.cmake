@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/skpro19/catkin_ws/src/my_local_planner/build/devel/lib;/home/skpro19/botsync_ws/devel/lib;/home/skpro19/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/skpro19/catkin_ws/src/my_local_planner/build/devel/lib;/home/skpro19/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -185,7 +185,7 @@ foreach(t ${my_local_planner_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "nav_msgs;roscpp;std_msgs;message_runtime;move_base_msgs;move_base;visualization_msgs")
+set(depends "nav_msgs;roscpp;std_msgs;message_runtime;move_base_msgs;move_base;visualization_msgs;base_local_planner;nav_core")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

@@ -9,6 +9,8 @@
 #include <costmap_2d/costmap_2d.h>
 #include <tf2_ros/buffer.h>
 #include <base_local_planner/costmap_model.h>
+#include <base_local_planner/map_grid.h>
+#include <base_local_planner/local_planner_util.h>
 
 using namespace std;
 
@@ -38,8 +40,17 @@ namespace local_planner{
       bool initialized_;
       costmap_2d::Costmap2D* costmap_ros_;
       costmap_2d::Costmap2DROS* my_costmap_ros;
-      tf::TransformListener* tf_;
+      //tf::TransformListener* tf_;
+      tf2_ros::Buffer *tf_;
+      
+      ros::Publisher local_costmap_publisher;
+      __uint32_t size_x_, size_y_;
 
+      base_local_planner::MapGrid *map_grid_;
+      base_local_planner::LocalPlannerUtil* local_planner_util_;
+
+      string global_frame_;
+  
   };
 };
 
