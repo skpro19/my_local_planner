@@ -21,10 +21,17 @@ namespace local_planner{
 
 
         }
+        
 
         void LocalPlanner::initialize(std::string name, tf2_ros::Buffer* tf, costmap_2d::Costmap2DROS* costmap_ros){
                 
                 ROS_INFO("Inside the initialize function!\n");
+                
+                ros::NodeHandle nh_("my_local_planner");
+
+                transformed_local_plan_pub = nh_.advertise<nav_msgs::Path>("transformed_local_plan", 1000, true); //enabled latching        
+
+                //Publishers and Subscibers
                 
                 if(!initialized_){
 
@@ -33,33 +40,44 @@ namespace local_planner{
                         
                 }
                 
-                my_costmap_ros = costmap_ros;
-                costmap_ros_ = my_costmap_ros->getCostmap();
-                
+                costmap_ros_ = costmap_ros;
+                costmap_ = costmap_ros_->getCostmap();                
                 tf_ = tf;
-                global_frame_ = my_costmap_ros->getGlobalFrameID();        
+                
+                ROS_WARN("global_frame_: %s\n", costmap_ros_->getGlobalFrameID().c_str());
 
-                ROS_WARN("global_frame_: %s\n", global_frame_.c_str());
-
-                size_x_ = costmap_ros_->getSizeInCellsX();
-                size_y_ = costmap_ros_->getSizeInCellsY(); 
+                //size_x_ = costmap_->getSizeInCellsX();
+                //size_y_ = costmap_->getSizeInCellsY(); 
 
 
-                ROS_INFO("size_x_: %d\n" , size_x_);
-                ROS_INFO("size_y_: %d\n", size_y_);
+                //ROS_INFO("size_x_: %d\n" , size_x_);
+                //ROS_INFO("size_y_: %d\n", size_y_);
 
                 local_planner_util_ = new base_local_planner::LocalPlannerUtil();
-                local_planner_util_->initialize(tf_, costmap_ros_, global_frame_);
-                
+                local_planner_util_->initialize(tf_, costmap_, costmap_ros_->getGlobalFrameID());
+
                 return;
         }       
+
+        void LocalPlanner::publish_transformed_local_plan(const vector<geometry_msgs::PoseStamped> &plan, const geometry_msgs::PoseStamped &goal_){
+
+                nav_msgs::Path path_ = {};
+
+                path_.header.frame_id = goal_.header.frame_id;
+                path_.header.stamp = ros::Time::now();
+
+                path_.poses = plan;
+
+                transformed_local_plan_pub.publish(path_);
+
+        }
 
         bool LocalPlanner::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan)
         {
                 
                 ROS_WARN("Inside the setPlan function!\n");
 
-                return false;
+                //return false;
 
                 if(!initialized_){
                 
@@ -68,14 +86,10 @@ namespace local_planner{
                 
                 }
 
-                global_plan_ = orig_global_plan;
-
-                ROS_WARN("global_plan_.size(): %d\n", (int)global_plan_.size());                
-
-                local_planner_util_->setPlan(orig_global_plan);                
+                local_planner_util_->setPlan(orig_global_plan);
                 
                 geometry_msgs::PoseStamped global_pose_;
-                bool global_pose_flag_ = my_costmap_ros->getRobotPose(global_pose_);
+                bool global_pose_flag_ = costmap_ros_->getRobotPose(global_pose_);
 
                 if (!global_pose_flag_) {
                         
@@ -93,8 +107,18 @@ namespace local_planner{
                         return false;
                 }
 
+                geometry_msgs::PoseStamped goal_; 
+                local_planner_util_->getGoal(goal_);
+
+                publish_transformed_local_plan(transformed_plan_, goal_);
+                
+                ROS_WARN("Sleeping for 10 seconds!\n");
+                ros::Duration(10.0).sleep();
+                
                 return true;
         }
+
+
 
         bool LocalPlanner::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
         {

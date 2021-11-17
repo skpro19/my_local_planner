@@ -11,13 +11,16 @@
 #include <base_local_planner/costmap_model.h>
 #include <base_local_planner/map_grid.h>
 #include <base_local_planner/local_planner_util.h>
-
+#include <nav_msgs/Path.h>
 
 namespace local_planner{
 
   class LocalPlanner : public nav_core::BaseLocalPlanner{
 
     public:
+
+      //Interface functions
+
       LocalPlanner();
 
       LocalPlanner(std::string name, tf2_ros::Buffer* tf,
@@ -34,11 +37,16 @@ namespace local_planner{
 
       bool isGoalReached();
 
+
+      //Extra Functions
+
+      void publish_transformed_local_plan(const std::vector<geometry_msgs::PoseStamped> &plan, const geometry_msgs::PoseStamped &goal_);
+
     private:
 
       bool initialized_;
-      costmap_2d::Costmap2D* costmap_ros_;
-      costmap_2d::Costmap2DROS* my_costmap_ros;
+      costmap_2d::Costmap2D* costmap_;
+      costmap_2d::Costmap2DROS* costmap_ros_;
       //tf::TransformListener* tf_;
       tf2_ros::Buffer *tf_;
       
@@ -47,10 +55,9 @@ namespace local_planner{
 
       base_local_planner::MapGrid *map_grid_;
       base_local_planner::LocalPlannerUtil* local_planner_util_;
-
-      std::string global_frame_;
-      std::vector<geometry_msgs::PoseStamped> global_plan_;
       
+      ros::Publisher transformed_local_plan_pub;
+
   };
 };
 
