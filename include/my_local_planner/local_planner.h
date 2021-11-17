@@ -12,7 +12,6 @@
 #include <base_local_planner/map_grid.h>
 #include <base_local_planner/local_planner_util.h>
 
-using namespace std;
 
 namespace local_planner{
 
@@ -49,8 +48,9 @@ namespace local_planner{
       base_local_planner::MapGrid *map_grid_;
       base_local_planner::LocalPlannerUtil* local_planner_util_;
 
-      string global_frame_;
-  
+      std::string global_frame_;
+      std::vector<geometry_msgs::PoseStamped> global_plan_;
+      
   };
 };
 

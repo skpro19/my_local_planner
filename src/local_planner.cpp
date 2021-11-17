@@ -5,6 +5,8 @@
 
 PLUGINLIB_EXPORT_CLASS(local_planner::LocalPlanner, nav_core::BaseLocalPlanner)
 
+using namespace std;
+
 namespace local_planner{
 
 
@@ -49,17 +51,16 @@ namespace local_planner{
                 local_planner_util_ = new base_local_planner::LocalPlannerUtil();
                 local_planner_util_->initialize(tf_, costmap_ros_, global_frame_);
                 
-                
-
                 return;
         }       
 
         bool LocalPlanner::setPlan(const std::vector<geometry_msgs::PoseStamped>& orig_global_plan)
         {
                 
-                ROS_INFO("Inside the setPlan function!\n");
-                
-                
+                ROS_WARN("Inside the setPlan function!\n");
+
+                return false;
+
                 if(!initialized_){
                 
                         ROS_ERROR("This planner has not been initialized, please call initialize() before using this planner");
@@ -67,7 +68,30 @@ namespace local_planner{
                 
                 }
 
-               
+                global_plan_ = orig_global_plan;
+
+                ROS_WARN("global_plan_.size(): %d\n", (int)global_plan_.size());                
+
+                local_planner_util_->setPlan(orig_global_plan);                
+                
+                geometry_msgs::PoseStamped global_pose_;
+                bool global_pose_flag_ = my_costmap_ros->getRobotPose(global_pose_);
+
+                if (!global_pose_flag_) {
+                        
+                        ROS_ERROR("Unable to get the global_pose_ --- Inside the setPlan function!\n");
+                        return false;
+
+                }
+
+                vector<geometry_msgs::PoseStamped> transformed_plan_;
+                bool local_plan_flag_ = local_planner_util_->getLocalPlan(global_pose_, transformed_plan_);
+                
+                if(!local_plan_flag_) {
+
+                        ROS_ERROR("Unable to get the local plan --- Inside the setPlan function!\n");
+                        return false;
+                }
 
                 return true;
         }
